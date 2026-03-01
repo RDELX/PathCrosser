@@ -1,0 +1,6 @@
+package-as: PathCrosser
+ignore:
+  - .github
+  - .gitignore
+  - README.md
+  - .vscode

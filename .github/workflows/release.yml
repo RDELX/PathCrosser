@@ -1,0 +1,22 @@
+name: Release Addon
+
+on:
+  push:
+    tags:
+      - '*' # Trigger this workflow when you push a Git Tag (e.g. v1.0.0)
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetches all history for tags and changelogs
+
+      - name: Create Packaged Addon
+        uses: BigWigsMods/packager@v2
+        with:
+          args: -d # Addon debug/release flag. Removes elements surrounded by @debug@ directives
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}  # You'll need to set this in your GitHub Repo Secrets

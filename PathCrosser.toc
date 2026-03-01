@@ -1,0 +1,17 @@
+## Interface: 120000
+## Title: PathCrosser
+## Notes: Advanced player tracker with detailed encounter history, coordinates, and analytics.
+## Author: Actual
+## Version: 1.0.0
+## SavedVariables: PathCrosser_DB
+## OptionalDeps: Ace3, LibDataBroker-1.1, LibDBIcon-1.0
+
+embeds.xml
+Core.lua
+Serialization.lua
+Sync.lua
+Tracking.lua
+Statistics.lua
+Options.lua
+GUI.lua
+Minimap.lua
