@@ -2,7 +2,7 @@
 ## Title: PathCrosser
 ## Notes: Advanced player tracker with detailed encounter history, coordinates, and analytics.
 ## Author: Actual
-## Version: 1.0.0
+## Version: 0.0.1
 ## SavedVariables: PathCrosser_DB
 ## OptionalDeps: Ace3, LibDataBroker-1.1, LibDBIcon-1.0
 
