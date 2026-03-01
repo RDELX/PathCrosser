@@ -98,7 +98,7 @@ function addon.CreateOptionsPanel()
     pruneBtn:SetText("Prune Old Encounters")
     pruneBtn:SetScript("OnClick", function()
         addon.PruneOldEncounters()
-        addon.Print("Database pruned!")
+        print("|cFF00FF00[PathCrosser]|r Database pruned!")
     end)
     yOffset = yOffset - 30
     
@@ -157,7 +157,7 @@ StaticPopupDialogs["PATHCROSSER_CLEAR_CONFIRM"] = {
     button2 = "Cancel",
     OnAccept = function()
         PathCrosser_DB.players = {}
-        addon.Print("All data has been cleared.")
+        print("|cFF00FF00[PathCrosser]|r All data has been cleared.")
     end,
     timeout = 0,
     whileDead = true,
