@@ -2,6 +2,14 @@ local addonName, addon = ...
 addon.frame = CreateFrame("Frame")
 addon.PRUNE_DAYS = 90 -- Increased due to detailed history
 
+function addon.Print(msg)
+    print("|cFF00FF00[PathCrosser]|r " .. tostring(msg))
+end
+
+function addon.PrintError(msg)
+    print("|cFFFF0000[PathCrosser]|r " .. tostring(msg))
+end
+
 -- Version for migration
 addon.DB_VERSION = 2
 
@@ -47,7 +55,7 @@ addon.frame:SetScript("OnEvent", function(self, event, arg1)
         if addon.CreateOptionsPanel then addon.CreateOptionsPanel() end
         if addon.InitMinimap then addon.InitMinimap() end
         
-        print("|cFF00FF00[PathCrosser]|r Loaded! Use /pc to open database or /pc help for commands.")
+        addon.Print("Loaded! Use /pc to open database or /pc help for commands.")
         
     elseif event == "UPDATE_MOUSEOVER_UNIT" then
         addon.TrackPlayer("mouseover")
@@ -71,7 +79,7 @@ end)
 
 -- Migrate database from old format to new
 function addon.MigrateDatabase()
-    print("|cFF00FF00[PathCrosser]|r Migrating database to version " .. addon.DB_VERSION .. "...")
+    addon.Print("Migrating database to version " .. addon.DB_VERSION .. "...")
     
     for fullName, data in pairs(PathCrosser_DB.players) do
         -- Old format: { count, lastSeen, class, level, zone }
@@ -107,7 +115,7 @@ function addon.MigrateDatabase()
     end
     
     PathCrosser_DB.version = addon.DB_VERSION
-    print("|cFF00FF00[PathCrosser]|r Migration complete!")
+    addon.Print("Migration complete!")
 end
 
 -- Prune old encounters
@@ -138,6 +146,6 @@ function addon.PruneOldEncounters()
     end
     
     if pruned > 0 then
-        print("|cFF00FF00[PathCrosser]|r Pruned " .. pruned .. " old player records.")
+        addon.Print("Pruned " .. pruned .. " old player records.")
     end
 end

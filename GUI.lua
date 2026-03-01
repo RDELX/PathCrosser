@@ -325,7 +325,7 @@ local function DrawBrowser(container, searchQuery, sortBy, filterRelation)
     relationDropdownRight:SetValue(data.relation or "neutral")
     relationDropdownRight:SetCallback("OnValueChanged", function(widget, event, key)
         data.relation = key
-        print("|cFF00FF00[PathCrosser]|r Relation updated for " .. selectedPlayer)
+        addon.Print("Relation updated for " .. selectedPlayer)
         -- Quick refresh to update icon in list
         DrawBrowser(container, searchQuery, sortBy, filterRelation)
     end)
@@ -342,7 +342,7 @@ local function DrawBrowser(container, searchQuery, sortBy, filterRelation)
             if tag ~= "" then table.insert(tags, tag) end
         end
         data.tags = tags
-        print("|cFF00FF00[PathCrosser]|r Tags updated for " .. selectedPlayer)
+        addon.Print("Tags updated for " .. selectedPlayer)
         DrawBrowser(container, searchQuery, sortBy, filterRelation)
     end)
     controlsGroup:AddChild(tagsEdit)
@@ -354,7 +354,7 @@ local function DrawBrowser(container, searchQuery, sortBy, filterRelation)
     notesEdit:SetText(data.notes or "")
     notesEdit:SetCallback("OnEnterPressed", function(widget, event, text)
         data.notes = text
-        print("|cFF00FF00[PathCrosser]|r Notes saved for " .. selectedPlayer)
+        addon.Print("Notes saved for " .. selectedPlayer)
     end)
     detailsScroll:AddChild(notesEdit)
     
@@ -565,7 +565,7 @@ local function DrawOptions(container)
     pruneBtn:SetWidth(200)
     pruneBtn:SetCallback("OnClick", function()
         addon.PruneOldEncounters()
-        print("|cFF00FF00[PathCrosser]|r Database pruned!")
+        addon.Print("Database pruned!")
     end)
     dbGroup:AddChild(pruneBtn)
 
@@ -612,7 +612,7 @@ function addon.OpenDatabaseWindow()
 
     local AceGUI = LibStub("AceGUI-3.0", true)
     if not AceGUI then 
-        print("|cFFFF0000[PathCrosser]|r Ace3 is missing! Please install Ace3 to use the UI.")
+        addon.PrintError("Ace3 is missing! Please install Ace3 to use the UI.")
         return 
     end
 
@@ -672,19 +672,19 @@ SlashCmdList["PATHCROSSER"] = function(msg)
     msg = strlower(strtrim(msg))
     
     if msg == "help" then
-        print("|cFF00FF00[PathCrosser]|r Commands:")
+        addon.Print("Commands:")
         print("/pc - Open main window")
         print("/pc stats - Show quick statistics")
         print("/pc prune - Manually prune old encounters")
         print("/pc help - Show this help")
     elseif msg == "stats" then
         local stats = addon.CalculateStatistics()
-        print("|cFF00FF00[PathCrosser]|r Statistics:")
+        addon.Print("Statistics:")
         print("Players: " .. stats.totalPlayers .. " | Encounters: " .. stats.totalEncounters)
         print("Friends: " .. stats.friends .. " | Rivals: " .. stats.rivals)
     elseif msg == "prune" then
         addon.PruneOldEncounters()
-        print("|cFF00FF00[PathCrosser]|r Pruning complete!")
+        addon.Print("Pruning complete!")
     else
         selectedPlayer = nil
         currentTab = "list"

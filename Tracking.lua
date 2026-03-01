@@ -76,7 +76,7 @@ function addon.TrackPlayer(unit)
         
         -- Notify for first encounter
         if PathCrosser_DB.options.notifyRareEncounters then
-            print("|cFF00FF00[PathCrosser]|r New player tracked: " .. addon.GetColoredName(fullName, classToken))
+            addon.Print("New player tracked: " .. addon.GetColoredName(fullName, classToken))
         end
     else
         local p = PathCrosser_DB.players[fullName]
@@ -109,7 +109,7 @@ function addon.TrackPlayer(unit)
             
             -- Notify for friend encounters
             if p.relation == "friend" and PathCrosser_DB.options.notifyFriends then
-                print("|cFF00FF00[PathCrosser]|r Friend spotted: " .. addon.GetColoredName(fullName, classToken) .. " in " .. zone)
+                addon.Print("Friend spotted: " .. addon.GetColoredName(fullName, classToken) .. " in " .. zone)
             end
         end
         

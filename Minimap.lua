@@ -5,7 +5,7 @@ function addon.InitMinimap()
     local icon = LibStub("LibDBIcon-1.0", true)
     
     if not LDB or not icon then 
-        print("|cFFFF0000[PathCrosser]|r LibDBIcon is missing. Minimap button disabled.")
+        addon.PrintError("LibDBIcon is missing. Minimap button disabled.")
         return 
     end
     
