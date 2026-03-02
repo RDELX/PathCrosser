@@ -595,7 +595,7 @@ local function DrawOptions(container)
 
     -- Disclaimer
     local spacer = AceGUI:Create("Label")
-    spacer:SetText("\n\nPathCrosser v0.1.0 - Enhanced Player Tracker")
+    spacer:SetText("\n\nPathCrosser v0.1.1 - Enhanced Player Tracker")
     spacer:SetColor(0.5, 0.5, 0.5)
     spacer:SetFullWidth(true)
     scrollFrame:AddChild(spacer)
