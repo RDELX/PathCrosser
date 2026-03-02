@@ -6,7 +6,7 @@ function addon.TrackPlayer(unit)
     if not PathCrosser_DB.options.trackInCities and IsResting() then return end
 
     local name, realm = UnitName(unit)
-    if not name then return end
+    if not name or name == "Unknown" then return end
     if not realm or realm == "" then realm = GetRealmName() end
     local fullName = name .. "-" .. realm
     
@@ -146,6 +146,122 @@ function addon.TrackPartyMembers()
     for i = 1, numMembers do
         local unit = groupType .. i
         addon.TrackPlayer(unit)
+    end
+end
+
+-- Process combat log for players in vicinity
+function addon.ProcessCombatLog()
+    local timestamp, subevent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
+    
+    if sourceGUID and sourceName and C_PlayerInfo.IsGUIDAPlayer(sourceGUID) then
+        addon.TrackPlayerByGUID(sourceGUID, sourceName)
+    end
+    
+    if destGUID and destName and C_PlayerInfo.IsGUIDAPlayer(destGUID) then
+        addon.TrackPlayerByGUID(destGUID, destName)
+    end
+end
+
+-- Track player from GUID (has less info than full unit track)
+function addon.TrackPlayerByGUID(guid, knownName)
+    if guid == UnitGUID("player") then return end
+    if not PathCrosser_DB.options.trackInCities and IsResting() then return end
+    
+    local localizedClass, englishClass, localizedRace, englishRace, sex, name, realm = GetPlayerInfoByGUID(guid)
+    
+    if not name or name == "" or name == "Unknown" then 
+        if knownName then
+            name = knownName
+        else
+            return
+        end
+    end
+    
+    -- In combat log, knownName is often Name-Realm
+    if string.find(name, "-") then
+        local parts = {strsplit("-", name)}
+        name = parts[1]
+        realm = parts[2]
+    end
+    
+    if not realm or realm == "" then
+        realm = GetRealmName()
+    end
+    
+    local fullName = name .. "-" .. realm
+    
+    -- Location information
+    local zone = GetZoneText()
+    local subzone = GetSubZoneText()
+    local mapID = C_Map.GetBestMapForUnit("player")
+    local x, y = 0, 0
+    if mapID then
+        local position = C_Map.GetPlayerMapPosition(mapID, "player")
+        if position then
+            x = math.floor(position.x * 10000) / 100
+            y = math.floor(position.y * 10000) / 100
+        end
+    end
+    
+    local encounter = {
+        timestamp = time(),
+        zone = zone or "Unknown",
+        subzone = subzone or "",
+        x = x,
+        y = y,
+        activity = "unknown",
+        inCombat = false,
+        isDead = false,
+        isMounted = false, -- can't easily tell from combat log
+        isAFK = false,
+        isPvP = false
+    }
+    
+    if not PathCrosser_DB.players[fullName] then
+        PathCrosser_DB.players[fullName] = {
+            class = englishClass or "UNKNOWN",
+            level = 0,
+            faction = "Neutral",
+            race = englishRace or "Unknown",
+            guild = nil,
+            encounters = { encounter },
+            notes = "",
+            tags = {},
+            relation = "neutral"
+        }
+        
+        if addon.Sync then addon.Sync.BroadcastEncounter(fullName, encounter) end
+        
+        if PathCrosser_DB.options.notifyRareEncounters then
+            print("|cFF00FF00[PathCrosser]|r New player tracked nearby: " .. addon.GetColoredName(fullName, englishClass))
+        end
+    else
+        local p = PathCrosser_DB.players[fullName]
+        p.class = englishClass or p.class
+        p.race = englishRace or p.race
+        
+        local shouldAddEncounter = true
+        if #p.encounters > 0 then
+            local lastEnc = p.encounters[#p.encounters]
+            local timeDiff = time() - lastEnc.timestamp
+            local zoneDiff = (lastEnc.zone ~= zone) or (lastEnc.subzone ~= subzone)
+            if timeDiff < 60 and not zoneDiff then
+                shouldAddEncounter = false
+            end
+        end
+        
+        if shouldAddEncounter then
+            table.insert(p.encounters, encounter)
+            if addon.Sync then addon.Sync.BroadcastEncounter(fullName, encounter) end
+            
+            if p.relation == "friend" and PathCrosser_DB.options.notifyFriends then
+                print("|cFF00FF00[PathCrosser]|r Friend spotted nearby: " .. addon.GetColoredName(fullName, p.class) .. " in " .. zone)
+            end
+        end
+        
+        if #p.encounters > 100 then
+            table.remove(p.encounters, 1)
+        end
     end
 end
 

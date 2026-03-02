@@ -23,7 +23,6 @@ addon.frame:SetScript("OnEvent", function(self, event, arg1)
             PathCrosser_DB.options = { 
                 trackInCities = false,
                 trackNearby = true,
-                trackParty = true,
                 notifyRareEncounters = true,
                 notifyFriends = true,
                 scanRadius = 100 -- yards
@@ -47,6 +46,23 @@ addon.frame:SetScript("OnEvent", function(self, event, arg1)
         if addon.CreateOptionsPanel then addon.CreateOptionsPanel() end
         if addon.InitMinimap then addon.InitMinimap() end
         
+        -- Timer for sweeping nearby nameplates continuously
+        C_Timer.NewTicker(2, function()
+            if not PathCrosser_DB.options.trackNearby then return end
+            -- Use the modern API to get all currently active nameplates
+            local nameplates = C_NamePlate.GetNamePlates()
+            if nameplates then
+                for _, nameplate in ipairs(nameplates) do
+                    local unit = nameplate.namePlateUnitToken
+                    if unit and UnitIsPlayer(unit) then
+                        addon.TrackPlayer(unit)
+                    end
+                end
+            end
+        end)
+        
+
+        
         print("|cFF00FF00[PathCrosser]|r Loaded! Use /pc to open database or /pc help for commands.")
         
     elseif event == "UPDATE_MOUSEOVER_UNIT" then
@@ -66,6 +82,7 @@ addon.frame:SetScript("OnEvent", function(self, event, arg1)
         if PathCrosser_DB.options.trackNearby then
             addon.TrackPlayer(arg1)
         end
+
     end
 end)
 

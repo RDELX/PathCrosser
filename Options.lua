@@ -146,7 +146,7 @@ function addon.CreateOptionsPanel()
     -- Version info
     local versionText = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
     versionText:SetPoint("BOTTOMLEFT", panel, "BOTTOMLEFT", 16, 16)
-    versionText:SetText("PathCrosser v1.0 - Enhanced Player Tracker")
+    versionText:SetText("PathCrosser v0.1.0 - Enhanced Player Tracker")
     versionText:SetTextColor(0.5, 0.5, 0.5)
 end
 

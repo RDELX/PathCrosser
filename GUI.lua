@@ -595,7 +595,7 @@ local function DrawOptions(container)
 
     -- Disclaimer
     local spacer = AceGUI:Create("Label")
-    spacer:SetText("\n\nPathCrosser v1.0 - Enhanced Player Tracker")
+    spacer:SetText("\n\nPathCrosser v0.1.0 - Enhanced Player Tracker")
     spacer:SetColor(0.5, 0.5, 0.5)
     spacer:SetFullWidth(true)
     scrollFrame:AddChild(spacer)
@@ -628,7 +628,7 @@ function addon.OpenDatabaseWindow()
     -- Count players for status bar
     local playerCount = 0
     for _ in pairs(PathCrosser_DB.players) do playerCount = playerCount + 1 end
-    mainFrame:SetStatusText(string.format("Tracking %d players | DB Version %d", playerCount, PathCrosser_DB.version))
+    mainFrame:SetStatusText(string.format("Tracking %d players", playerCount))
     
     mainFrame:SetLayout("Fill")
     mainFrame:SetWidth(800) -- Increased width for split pane
