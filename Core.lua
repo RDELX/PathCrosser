@@ -47,7 +47,7 @@ addon.frame:SetScript("OnEvent", function(self, event, arg1)
         if addon.InitMinimap then addon.InitMinimap() end
         
         -- Timer for sweeping nearby nameplates continuously
-        C_Timer.NewTicker(2, function()
+        C_Timer.NewTicker(5, function()
             if not PathCrosser_DB.options.trackNearby then return end
             -- Use the modern API to get all currently active nameplates
             local nameplates = C_NamePlate.GetNamePlates()

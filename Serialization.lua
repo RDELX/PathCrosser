@@ -29,7 +29,7 @@ end
 local function EscapeStr(str)
     if not str then return "" end
     str = tostring(str)
-    str = string.gsub(str, "|", "||")
+    str = string.gsub(str, "~", "~~")
     str = string.gsub(str, "\n", "\\n")
     return str
 end
@@ -37,14 +37,14 @@ end
 local function UnescapeStr(str)
     if not str or str == "" then return nil end
     str = string.gsub(str, "\\n", "\n")
-    str = string.gsub(str, "||", "|")
+    str = string.gsub(str, "~~", "~")
     return str
 end
 
 -- Export single encounter for Sync
 function addon.Serialization.SerializeEncounter(name, enc)
-    -- S|Name|class|level|ts|zone|subzone|x|y|activity|flags
-    return string.format("S|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s",
+    -- S~Name~class~level~ts~zone~subzone~x~y~activity~flags
+    return string.format("S~%s~%s~%s~%s~%s~%s~%s~%s~%s~%s",
         name,
         EscapeStr(PathCrosser_DB.players[name].class),
         tostring(PathCrosser_DB.players[name].level or 0),
@@ -59,7 +59,7 @@ function addon.Serialization.SerializeEncounter(name, enc)
 end
 
 function addon.Serialization.DeserializeEncounter(str)
-    local p1, name, class, level, ts, zone, subzone, x, y, activity, flags = strsplit("|", str)
+    local p1, name, class, level, ts, zone, subzone, x, y, activity, flags = strsplit("~", str)
     if p1 == "S" and name and ts then
         local enc = {
             timestamp = tonumber(ts) or time(),

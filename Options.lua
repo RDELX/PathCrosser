@@ -53,7 +53,7 @@ function addon.CreateOptionsPanel()
     CreateCheckbox(
         "Track nearby players (via nameplates)",
         "trackNearby",
-        "Automatically tracks players with visible nameplates every 5 seconds"
+        "Automatically tracks players with visible nameplates every 5 seconds\n(|cFFFF0000Important:|r Friendly nameplates MUST be enabled (Shift+V) for the addon to scan them)"
     )
     
     CreateCheckbox(

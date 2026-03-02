@@ -540,7 +540,7 @@ local function DrawOptions(container)
     end
 
     CreateSettingCheckbox(trackGroup, "Track players in Sanctuaries/Major Cities", "trackInCities", "When enabled, tracks players even while resting in cities")
-    CreateSettingCheckbox(trackGroup, "Track nearby players (via nameplates)", "trackNearby", "Automatically tracks players with visible nameplates every 5 seconds")
+    CreateSettingCheckbox(trackGroup, "Track nearby players (via nameplates)", "trackNearby", "Automatically tracks players with visible nameplates every 5 seconds\n(|cFFFF0000Important:|r Friendly nameplates MUST be enabled (Shift+V) for the addon to scan them)")
     CreateSettingCheckbox(trackGroup, "Track party/raid members", "trackParty", "Automatically tracks players in your group")
 
     -- Notifications
